@@ -16,7 +16,7 @@ jobs:
       matrix:
         python-version: [3.9]
     runs-on: windows-latest
-
+    if: ${{ !contains(github.event.head_commit.message, '[skip ci]') }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -33,4 +33,4 @@ jobs:
 
       - name: Run unit tests
         run: |
-          python -m pytest tests/ --create-files --cov=src --cov-report term-missing  -vv
+          python -m pytest tests/ --create-files --cov=src/rom_detective --cov-report term-missing  -vv
