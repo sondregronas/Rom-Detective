@@ -8,11 +8,15 @@ A tool to automatically *index* ROMs and create shortcuts to them. Allowing you 
 
 **For now this works for my personal needs, but it's by no means user-friendly yet.**
 
+<br>
+
 ## How
 The application only works on Windows. The destination drive must be formatted to support symlinks for ROMs (NTFS or UDF, see https://docs.microsoft.com/en-us/windows/win32/fileio/filesystem-functionality-comparison)
 
 There's currently no intuitive way to run the script (a GUI is in the works) other than to hardcode the ROMs location inside of `main.py`.
 ROMs are linked with symlinks which may require admin privileges to run.
+
+<br>
 
 ## What
 ROMs or Games are indexed as a `IndexerItem` dataclass:
@@ -37,19 +41,22 @@ SteamLibraryIndexItem(IndexerItem) # Reads libraryfolders.vdf in primary steam i
 
 A function `create_shortcut(IndexerItem)` creates either a symlink, or a shortcut, to a target destination (Default: `%homepath%/ROMs/<platform>`)
 
-## Run with Python:
+<br>
+
+## Setup Python:
+Modify `main.py` to fit your needs.
 ```bash
 pip install -r requirements.txt
 python main.py
 :: OR
 run.bat
 ```
-Modify `main.py` and `run.bat` to match your needs. Start `run.bat` to execute `main.py`.
-
-**Build**:
+To build the application, simply run
 ```bash
 pyinstaller main.spec
 ```
+
+<br>
 
 ## Why?
 In order to more easily update the library inside an emulation launcher (such as LaunchBox),
@@ -59,6 +66,8 @@ Some ROMs require specific naming schemes to work at all, such as Playstation 3'
 By creating a shortcut to `EBOOT.BIN` using the proper game title as the filename will however allow LaunchBox to interpret the ROM correctly.
 
 This also allows LaunchBox to watch for added/removed ROMs, without physically having to move the ROM files, meaning they can be stored wherever without losing that benefit.
+
+<br>
 
 ## TO-DO:
 - Add a GUI / config file
