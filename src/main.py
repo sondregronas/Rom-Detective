@@ -17,7 +17,7 @@ from rom_detective.util_main import identify_platforms_from_path, index_roms_fro
 from rom_detective.util_index import index_steam_library
 from rom_detective._globals_ import PLATFORMS
 from rom_detective.util_shortcuts import create_shortcut
-from class_logger import Logger
+from rom_detective.class_logger import Logger
 
 
 # TODO: GUI and plonk things into a class

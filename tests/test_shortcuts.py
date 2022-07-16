@@ -43,7 +43,6 @@ def test_dry_blacklist():
     assert 'blacklist' in test.keys()
 
 
-
 def test_dry_whitelist():
     test_rom = SteamLibraryIndexItem({f'{TEST_FILES_PATH}\\steam': '228980'})
     test_rom.whitelisted = True

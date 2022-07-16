@@ -38,11 +38,12 @@ class Logger:
     def load(self, path: str) -> None:
         raise NotImplementedError
 
-    def write(self, path: str = ROOT_FOLDER) -> None:
+    def write(self, path: str = ROOT_FOLDER) -> bool:
+        """Returns True if log is written, False if it is skipped"""
         if not self.log['success'] and self.successful:
             print(f"Would've written {self.successful} entries to active_shortcuts.log\n"
                   f"and {self.blacklisted} entries to blacklist.log (DRY_RUN)")
-            return
+            return False
         for key, logfile in self.log_files.items():
             target = f'{path}\\{logfile}'
             print(target)
@@ -51,6 +52,7 @@ class Logger:
                 file = open(target, "w", encoding='utf-8')
                 file.write('\n'.join(self.log[key]))
                 file.close()
+        return True
 
     def __str__(self):
         return f"\n" \

@@ -53,7 +53,7 @@ def get_destination_folder(title: str, platform: Platform, target_folder: str = 
     return destination
 
 
-def _create_shortcut(target_file: str, destination_file: str) -> str:
+def _create_shortcut(target_file: str, destination_file: str) -> dict:
     """
     Takes a target_file path and a destination_file and creates a shortcut
     Returns string: f'{destination_file}-->{target_file}'
@@ -72,7 +72,7 @@ def _create_shortcut(target_file: str, destination_file: str) -> str:
         shortcut = shell.CreateShortCut(destination_file)
         shortcut.Targetpath = target_file
         shortcut.save()
-    return f'{destination_file}->{target_file}'
+    return {'success': f'{destination_file}->{target_file}'}
 
 
 def _create_symlink(target_file: str, destination_file: str) -> dict:
