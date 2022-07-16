@@ -23,9 +23,9 @@ ROMs or Games are indexed as a `IndexerItem` dataclass:
 ```python
 @dataclass
 class IndexerItem:
-    source: str
-    platform: Platform
-    filename: str
+    source: str # Path to original ROM or Game file/executable
+    platform: Platform # Global variable PLATFORMS[<platform_id>] (PLATFORMS['n64'])
+    filename: str # Does some re-formatting and searching, but it's not an indexer for all ROM types.
 ```
 
 `IndexerItem` has different subclasses for certain ROM or game types to automatically fetch the correct ROM file and metadata:

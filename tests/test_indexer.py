@@ -55,6 +55,13 @@ def test_console_str():
     assert str(test) == 'test (None)'
 
 
+def test_whitelist():
+    test = IndexerItem(source=f'test', platform=None)
+    assert not test.whitelisted
+    test.whitelist(force=True)
+    assert test.whitelisted
+
+
 #####################
 # SUBCLASS_CONSOLES #
 #####################

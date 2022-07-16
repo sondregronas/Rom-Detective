@@ -17,7 +17,7 @@ def test_logger():
     assert logger.blacklisted == 2
     logger.add({'platforms': 'Test'})
     assert logger.platforms == 1
-    assert logger.total == 4
+    assert logger.total == 3
 
     assert 'Log results:' in str(logger)
 

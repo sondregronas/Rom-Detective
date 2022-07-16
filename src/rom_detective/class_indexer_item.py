@@ -5,6 +5,7 @@ from dataclasses import dataclass, field
 
 from rom_detective.class_indexer_platform import Platform
 from rom_detective._const_ import ILLEGAL_CHARACTERS
+from rom_detective._const_ import ROOT_FOLDER
 
 
 """
@@ -18,7 +19,8 @@ ConsoleIndexerItem:
     _blacklist: 'bool': Override for property blacklisted, set by blacklist()
     
     functions:
-        - blacklist() - Override for default 'blacklisted'
+        - blacklist(force=True) - Override for default 'blacklisted', defined in blacklist.cfg
+        - whitelist(force=False) - Overrides blacklist, defined in whitelist.cfg
     
     properties:
         - title: returns str of filename, without extension ('Example')
@@ -38,14 +40,14 @@ class IndexerItem:
     platform: Platform
     filename: str = None
     clean_brackets: bool = True
-    # TODO: Check whitelist file for whitelisted within class?
     whitelisted: bool = False
-    # _blacklist = override for blacklisted for regular items
     _blacklist: bool = field(init=False, repr=False, default=False)
 
     def __post_init__(self) -> None:
         """Set filename from path unless specified, then sanitize the filename"""
         self.subclass_init()
+        self.blacklist(force=False)
+        self.whitelist(force=False)
         self.filename = self.source.split('\\')[-1] if not self.filename else self.filename
         self.sanitize_filename()
 
@@ -72,8 +74,29 @@ class IndexerItem:
         """Used by some ROM/Game types"""
         return False or self._blacklist
 
-    def blacklist(self) -> None:
-        self._blacklist = True
+    def blacklist(self, force: bool = True) -> None:
+        """Override for <blacklisted> (Manually defined)"""
+        if force:
+            self._blacklist = force
+            return
+        try:
+            self._blacklist = self.source in open(f'{ROOT_FOLDER}\\config\\blacklist.cfg',
+                                                  "r", encoding='utf8').read().split('\n')
+        except FileNotFoundError as e:
+            print(f'Warning: {e}')
+            self.whitelisted = False
+
+    def whitelist(self, force: bool = True) -> None:
+        """Override for <blacklisted> (Manually defined)"""
+        if force:
+            self.whitelisted = force
+            return
+        try:
+            self.whitelisted = self.source in open(f'{ROOT_FOLDER}\\config\\whitelist.cfg',
+                                                   "r", encoding='utf8').read().split('\n')
+        except FileNotFoundError as e:
+            print(f'Warning: {e}')
+            self.whitelisted = False
 
     def sanitize_filename(self) -> str:
         """

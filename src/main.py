@@ -50,13 +50,13 @@ def main():
     ##
 
     # Create shortcuts for all entries in games
-    [logger.add(create_shortcut(game)) for game in games]
+    [logger.add(create_shortcut(game, dry_run=False)) for game in games]
 
     # Finish up
     print(logger)
     if WRITE_LOG:
         logger.write()
-    input("Press any key to exit...")
+    input("Press enter key to exit...")
 
 
 if __name__ == '__main__':
