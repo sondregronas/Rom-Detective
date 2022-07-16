@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu type="complex" access="777">
+    <longname_en type="string" length="512">Test Wii U Game</longname_en>
+</menu>

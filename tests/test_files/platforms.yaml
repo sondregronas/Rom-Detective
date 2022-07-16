@@ -1,0 +1,14 @@
+Test Number 1:
+  aliases:
+    - test 1
+    - test 2
+  extensions:
+    - .test1
+  id: test1
+Test Number 2:
+  aliases:
+    - test2 1
+    - test2 2
+  extensions:
+    - .test2
+  id: test2

@@ -1,0 +1,20 @@
+"libraryfolders"
+{
+	"0"
+	{
+		"path"		"tests\\test_files\\steam"
+		"apps"
+		{
+			"228980"		"None"
+			"0123456789"		"None"
+		}
+	}
+	"1"
+	{
+		"path"		"tests\\test_files\\steam_2"
+		"apps"
+		{
+			"0123456789"		"None"
+		}
+	}
+}
