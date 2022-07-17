@@ -1,11 +1,14 @@
 <div align="center">
 <h1>🕵️ Rom Detective 🕹️</h1>
-<img src="media/graphic.png">
+<img src="media/graphic.png" width="50%">
+
 <a href="https://github.com/sondregronas/Rom-Detective/"><img src="https://img.shields.io/github/workflow/status/sondregronas/Rom-Detective/CI"></a>
 <a href="https://github.com/sondregronas/Rom-Detective/commit/"><img src="https://img.shields.io/github/last-commit/sondregronas/Rom-Detective"></a>
 <img src="https://img.shields.io/github/license/sondregronas/Rom-Detective">
 <a href="https://codecov.io/gh/sondregronas/Rom-Detective" ><img src="https://codecov.io/gh/sondregronas/Rom-Detective/branch/main/graph/badge.svg?token=HF8EDCQ4KZ"/></a>
 <a href="https://www.buymeacoffee.com/u92RMis"><img src="https://badgen.net/badge/icon/buymeacoffee?icon=buymeacoffee&label"></a>
+
+<br>
 
 A tool to automatically *index* ROMs and create shortcuts to them. Allowing you to physically store your ROMs wherever you'd, while still treating them like individual ROMs for launchers like LaunchBox.
 
