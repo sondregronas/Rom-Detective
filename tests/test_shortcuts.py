@@ -3,6 +3,7 @@ import pytest
 from rom_detective._const_ import DEFAULT_TARGET_FOLDER
 from rom_detective._globals_ import PLATFORMS
 
+from rom_detective.class_indexer_item import IndexerItem
 from rom_detective.util_shortcuts import create_shortcut, get_destination_folder
 from rom_detective.subclass_consoles import PS3IndexItem
 from rom_detective.subclass_pc import SteamLibraryIndexItem
@@ -22,8 +23,8 @@ def test_create_shortcut():
     test = create_shortcut(test_rom)
     assert f'{DEFAULT_TARGET_FOLDER}\\{test_rom.platform.name}\\{test_rom.filename}->{test_rom.source}' in test['success']
 
-    # .lnk
-    test_rom.filename = 'test.lnk'
+    # .lnk (File is unimportant, platform=win is)
+    test_rom = IndexerItem(f'{TEST_FILES_PATH}\\n64\\test.z64', platform=PLATFORMS['win'], filename='test.lnk')
     test = create_shortcut(test_rom)
     assert f'{DEFAULT_TARGET_FOLDER}\\{test_rom.platform.name}\\{test_rom.filename}->{test_rom.source}' in test['success']
     
