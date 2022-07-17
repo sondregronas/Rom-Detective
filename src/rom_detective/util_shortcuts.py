@@ -87,7 +87,7 @@ def _create_symlink(target_file: str, destination_file: str) -> dict:
     except FileExistsError:
         # TODO: Overwrite? incase target_file has changed location
         print(f'Shortcut already exists for {target_file}, skipping')
-    except OSError as e:
+    except OSError as e: # pragma: no cover
         raise RuntimeError(f'Missing Privileges to create symlinks, try running as admin. (Msg: {e})')
     return {'success': f'{destination_file}->{target_file}'}
 
