@@ -10,7 +10,7 @@
 
 <br>
 
-A tool to automatically *index* ROMs and create shortcuts to them. Allowing you to physically store your ROMs wherever you'd, while still treating them like individual ROMs for launchers like LaunchBox.
+A tool to automatically *index* ROMs and create shortcuts to them. Allowing you to physically store your ROMs wherever you'd like, while still treating them like individual ROMs for launchers like LaunchBox.
 
 **For now this works for my personal needs, but it's by no means user-friendly yet.**
 </div>
