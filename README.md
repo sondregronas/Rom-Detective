@@ -1,7 +1,6 @@
 <div align="center">
 <h1>🕵️ Rom Detective 🕹️</h1>
-<h4>A shortcut indexer for ROMs and Games</h4>
-
+<img src="media/graphic.png">
 <a href="https://github.com/sondregronas/Rom-Detective/"><img src="https://img.shields.io/github/workflow/status/sondregronas/Rom-Detective/CI"></a>
 <a href="https://github.com/sondregronas/Rom-Detective/commit/"><img src="https://img.shields.io/github/last-commit/sondregronas/Rom-Detective"></a>
 <img src="https://img.shields.io/github/license/sondregronas/Rom-Detective">
