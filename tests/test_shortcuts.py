@@ -23,12 +23,23 @@ def test_create_shortcut():
     assert f'{DEFAULT_TARGET_FOLDER}\\{test_rom.platform.name}\\{test_rom.filename}->{test_rom.source}' in test['success']
 
     # .lnk
-    # TODO: Currently no platforms use .lnk, only .symlink
+    test_rom.filename = 'test.lnk'
+    test = create_shortcut(test_rom)
+    assert f'{DEFAULT_TARGET_FOLDER}\\{test_rom.platform.name}\\{test_rom.filename}->{test_rom.source}' in test['success']
     
     # .symlink
     test_rom = PS3IndexItem(f'{TEST_ROMS_PATH}\\playstation 3\\exampleid')
     test = create_shortcut(test_rom)
     assert f'{DEFAULT_TARGET_FOLDER}\\{test_rom.platform.name}\\{test_rom.filename}->{test_rom.source}' in test['success']
+
+
+@pytest.mark.createfiles(reason='Creates folders & files, use --create-files flag to run')
+def test_duplicate_symlink(capfd):
+    test_rom = PS3IndexItem(f'{TEST_ROMS_PATH}\\playstation 3\\exampleid')
+    create_shortcut(test_rom)
+    create_shortcut(test_rom)
+    out, err = capfd.readouterr()
+    assert 'Shortcut already exists' in out
 
 
 def test_dry_run():

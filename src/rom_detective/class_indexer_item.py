@@ -20,7 +20,7 @@ ConsoleIndexerItem:
     
     functions:
         - blacklist(force=True) - Override for default 'blacklisted', defined in blacklist.cfg
-        - whitelist(force=False) - Overrides blacklist, defined in whitelist.cfg
+        - whitelist(force=True) - Overrides blacklist, defined in whitelist.cfg
     
     properties:
         - title: returns str of filename, without extension ('Example')

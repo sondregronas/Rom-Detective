@@ -1,3 +1,6 @@
+import pytest
+
+
 from rom_detective.util_main import(
     identify_platform_from_path,
     identify_platforms_from_path,
@@ -17,3 +20,12 @@ def test_util_main():
     rom_folders.update({f'{TEST_ROMS_PATH}\\n64': None})
     games = index_roms_from_dict(rom_folders)
     assert len(games) == 13
+
+
+def test_identify_platform_exception(capfd):
+    identify_platform_from_path('test')
+    out, err = capfd.readouterr()
+    # Assert something is printed (a warning)
+    assert out
+
+
