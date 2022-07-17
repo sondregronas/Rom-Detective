@@ -27,6 +27,11 @@ def test_create_shortcut():
     test_rom = IndexerItem(f'{TEST_FILES_PATH}\\n64\\test.z64', platform=PLATFORMS['win'], filename='test.lnk')
     test = create_shortcut(test_rom)
     assert f'{DEFAULT_TARGET_FOLDER}\\{test_rom.platform.name}\\{test_rom.filename}->{test_rom.source}' in test['success']
+
+    # Ensure sure .lnk is automatically appended, if not specified (and is not .url)
+    test_rom = IndexerItem(f'{TEST_FILES_PATH}\\n64\\test.z64', platform=PLATFORMS['win'], filename='test2.exe')
+    test = create_shortcut(test_rom)
+    assert f'{DEFAULT_TARGET_FOLDER}\\{test_rom.platform.name}\\{test_rom.filename}.lnk->{test_rom.source}' in test['success']
     
     # .symlink
     test_rom = PS3IndexItem(f'{TEST_ROMS_PATH}\\playstation 3\\exampleid')

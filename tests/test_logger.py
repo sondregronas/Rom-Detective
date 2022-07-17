@@ -1,6 +1,8 @@
 import pytest
 import os
 
+from pathlib import Path
+
 from rom_detective.class_logger import Logger
 from test_const import TEST_FILES_PATH
 
@@ -35,6 +37,15 @@ def test_logger_write():
     assert not os.path.exists(f'{TEST_FILES_PATH}\\{logger.log_files["success"]}')
     logger.write(path_dir=f'{TEST_FILES_PATH}')
     assert os.path.exists(f'{TEST_FILES_PATH}\\{logger.log_files["success"]}')
+
+    # Ensure logger can make 1 folder ("logs") if required
+    assert not Path(f'{TEST_FILES_PATH}\\test_log_folder').exists()
+    logger.write(path_dir=f'{TEST_FILES_PATH}\\test_log_folder')
+    assert Path(f'{TEST_FILES_PATH}\\test_log_folder').exists()
+
+    # Ensure logger can't make 2 folders
+    with pytest.raises(RuntimeError):
+        logger.write(path_dir=f'{TEST_FILES_PATH}\\test_log_folder2\\nested')
 
 
 def test_logger_write_dryrun():

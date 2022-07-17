@@ -72,8 +72,11 @@ class Logger:
             return False
 
         # Create the given folder if it doesn't exist, but parent does
-        if Path(path_dir).parent.is_dir() and not Path(path_dir).is_dir():
-            Path(path_dir).mkdir(exist_ok=True)
+        if Path(path_dir).parent.is_dir():
+            if not Path(path_dir).is_dir():
+                Path(path_dir).mkdir(exist_ok=True)
+        else:
+            raise RuntimeError(f'Cannot find directory {Path(path_dir).parent}')
 
         for key, logfile in self.log_files.items():
             target = f'{path_dir}\\{logfile}'
