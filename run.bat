@@ -1,5 +1,7 @@
 @echo off
 ::===============================================================================================
+:: Run this if you want to run from Python (not the installed dist), with admin privileges
+::
 :: create_shortcut() might require admin privileges in order to create symlinks ROMs
 :: Limitation: Only works when destination folder supports symlinks (NTFS or UDF)
 ::===============================================================================================

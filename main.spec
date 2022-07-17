@@ -1,5 +1,10 @@
 # -*- mode: python ; coding: utf-8 -*-
 
+# Project folders
+# data/
+# src/
+# main.ico
+# main.spec
 
 block_cipher = None
 
@@ -45,20 +50,5 @@ exe = EXE(
 	icon='main.ico',
 )
 
-import os
 import shutil
-
-os.makedirs(os.path.dirname('{0}/logs/'.format(DISTPATH)), exist_ok=True)
-os.makedirs(os.path.dirname('{0}/config/'.format(DISTPATH)), exist_ok=True)
-
-shutil.copyfile('default_files/readme.txt', '{0}/readme.txt'.format(DISTPATH))
-
-shutil.copyfile('default_files/logs/active_shortcuts.log', '{0}/logs/active_shortcuts.log'.format(DISTPATH))
-shutil.copyfile('default_files/logs/blacklist.log', '{0}/logs/blacklist.log'.format(DISTPATH))
-shutil.copyfile('default_files/logs/platforms.log', '{0}/logs/platforms.log'.format(DISTPATH))
-
-shutil.copyfile('default_files/config/config.cfg', '{0}/config/config.cfg'.format(DISTPATH))
-shutil.copyfile('default_files/config/whitelist.cfg', '{0}/config/whitelist.cfg'.format(DISTPATH))
-shutil.copyfile('default_files/config/blacklist.cfg', '{0}/config/blacklist.cfg'.format(DISTPATH))
-
 shutil.copytree('data', '{0}/data'.format(DISTPATH))

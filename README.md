@@ -63,6 +63,8 @@ To build the application, simply run
 pyinstaller main.spec
 ```
 
+Note: if your files are stored on a NAS and you're running as admin, make sure the system user on your PC has access to the network drives (see `run.bat`). (This won't be a problem when a GUI is in place)
+
 ## TO-DO:
 - Add a GUI / config file
 - Complete platforms / default extensions in `src/const.py`

@@ -1,18 +1,22 @@
-from rom_detective._const_ import ROOT_FOLDER
+from pathlib import Path
+
+"""
+Logger
+======
+A logger for Rom Detective
+Holds logs in a dict with 4 key values:
+
+From create_shortcut:
+    'blacklist': list() -> list of items that have not been processed blacklisted ({source})
+    'success' or 'dry_run': list() -> list of items that were succesful ({shortcut}->{source})
+
+From platforms:
+    'platforms': list() -> list of ({platform_source}->{platform_name})
+"""
 
 
 class Logger:
-    """
-    A logger for Rom Detective
-    Holds logs in a dict with 4 key values:
-
-    From create_shortcut:
-        'blacklist': list() -> list of items that have not been processed blacklisted ({source})
-        'success' or 'dry_run': list() -> list of items that were succesful ({shortcut}->{source})
-
-    From platforms:
-        'platforms': list() -> list of ({platform_source}->{platform_name})
-    """
+    """Logger Class"""
     def __init__(self):
         # TODO: Change keys to enum values?
         self.log = dict({
@@ -56,7 +60,7 @@ class Logger:
         """Load a series of old log files, will be used to compare"""
         raise NotImplementedError
 
-    def write(self, path: str = f'{ROOT_FOLDER}\\logs') -> bool:
+    def write(self, path_dir: str) -> bool:
         """
         Write (by default: all) logs to disk in the given path
 
@@ -66,10 +70,15 @@ class Logger:
             print(f"Would've written {self.successful} entries to active_shortcuts.log\n"
                   f"and {self.blacklisted} entries to blacklist.log (DRY_RUN)")
             return False
+
+        # Create the given folder if it doesn't exist, but parent does
+        if Path(path_dir).parent.is_dir() and not Path(path_dir).is_dir():
+            Path(path_dir).mkdir(exist_ok=True)
+
         for key, logfile in self.log_files.items():
-            target = f'{path}\\{logfile}'
+            target = f'{path_dir}\\{logfile}'
             if key in self.log.keys():
-                file = open(target, "w", encoding='utf-8')
+                file = open(target, "w+", encoding='utf-8')
                 file.write('\n'.join(self.log[key]))
                 file.close()
         return True

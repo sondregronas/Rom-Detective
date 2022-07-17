@@ -16,8 +16,10 @@ from win32com.client import Dispatch
 from rom_detective.util_main import identify_platforms_from_path, index_roms_from_dict
 from rom_detective.util_index import index_steam_library
 from rom_detective._globals_ import PLATFORMS
+from rom_detective._const_ import ROOT_FOLDER
 from rom_detective.util_shortcuts import create_shortcut
 from rom_detective.class_logger import Logger
+from startup import init_folders
 
 
 # TODO: GUI and plonk things into a class
@@ -28,6 +30,9 @@ ROM_FOLDER = r'S:\ROMs'
 STEAM_FOLDER = r'C:\Program Files (x86)\Steam'
 
 def main():
+    print("Note: You may need to run this application as admin if symlinks aren't being created")
+
+    init_folders(path=ROOT_FOLDER)
     logger = Logger()
     # Identify platforms in main_folder
     rom_folders = identify_platforms_from_path(ROM_FOLDER)
@@ -55,7 +60,7 @@ def main():
     # Finish up
     print(logger)
     if WRITE_LOG:
-        logger.write()
+        logger.write(path_dir=f'{ROOT_FOLDER}\\logs')
     input("Press enter key to exit...")
 
 

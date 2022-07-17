@@ -33,11 +33,11 @@ def test_logger_write():
     logger = Logger()
     logger.add({'success': 'Test'})
     assert not os.path.exists(f'{TEST_FILES_PATH}\\{logger.log_files["success"]}')
-    logger.write(path=f'{TEST_FILES_PATH}')
+    logger.write(path_dir=f'{TEST_FILES_PATH}')
     assert os.path.exists(f'{TEST_FILES_PATH}\\{logger.log_files["success"]}')
 
 
 def test_logger_write_dryrun():
     logger = Logger()
     logger.add({'dry_run': 'Test'})
-    assert not logger.write(path=f'{TEST_FILES_PATH}')
+    assert not logger.write(path_dir=f'{TEST_FILES_PATH}')
