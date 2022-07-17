@@ -17,16 +17,16 @@ ConsoleIndexerItem:
                     during sanitization (Default: True)
     whitelisted: 'bool' Overwrites blacklist when True
     _blacklist: 'bool': Override for property blacklisted, set by blacklist()
-    
+
     functions:
         - blacklist(force=True) - Override for default 'blacklisted', defined in blacklist.cfg
         - whitelist(force=True) - Overrides blacklist, defined in whitelist.cfg
-    
+
     properties:
         - title: returns str of filename, without extension ('Example')
         - extension: returns str of extension, including . ('.z64')
         - blacklisted: returns bool of whether a game is blacklisted
-        
+
     __post_init__:
         def subclass_init()
         self.filename = self.source.split('\\')[-1] if not self.filename else self.filename
@@ -82,7 +82,7 @@ class IndexerItem:
         try:
             self._blacklist = self.source in open(f'{ROOT_FOLDER}\\config\\blacklist.cfg',
                                                   "r", encoding='utf8').read().split('\n')
-        except FileNotFoundError as e:
+        except FileNotFoundError as e:  # pragma: no cover
             print(f'Warning: {e}')
             self.whitelisted = False
 
@@ -94,7 +94,7 @@ class IndexerItem:
         try:
             self.whitelisted = self.source in open(f'{ROOT_FOLDER}\\config\\whitelist.cfg',
                                                    "r", encoding='utf8').read().split('\n')
-        except FileNotFoundError as e:
+        except FileNotFoundError as e:  # pragma: no cover
             print(f'Warning: {e}')
             self.whitelisted = False
 

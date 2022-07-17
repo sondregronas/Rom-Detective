@@ -9,7 +9,7 @@ from rom_detective.subclass_pc import SteamLibraryIndexItem
 from rom_detective._globals_ import PLATFORMS
 
 
-def list_all_of_type(directory: str, extensions: list()) -> list[str]:
+def list_all_of_type(directory: str, extensions: list) -> list[str]:
     """
     Takes a directory path to scan files from
     Returns abspath to ALL files matching any extension from a list of extensions
@@ -90,7 +90,11 @@ def index_steam_library(primary_steam_dir: str) -> list[SteamLibraryIndexItem]:
     TODO: Simplify?
     """
     output = list()
-    steam_vdf = vdf.load(open(f'{primary_steam_dir}\\steamapps\\libraryfolders.vdf'))
+    try:
+        steam_vdf = vdf.load(open(f'{primary_steam_dir}\\steamapps\\libraryfolders.vdf'))
+    except FileNotFoundError:
+        print(f'The provided Steam directory is invalid ({primary_steam_dir})')
+        return output
 
     # Create a dict for every {path: list[game_id]}
     path_id_pairs = {
@@ -104,7 +108,7 @@ def index_steam_library(primary_steam_dir: str) -> list[SteamLibraryIndexItem]:
     return output
 
 
-def index_folder_from_platform(path: str, platform: Platform) -> list[IndexerItem]:
+def index_rom_folder_from_platform(path: str, platform: Platform) -> list[IndexerItem]:
     methods = {
         'ps3': index_ps3_folder,
         'wiiu': index_wiiu_folder,

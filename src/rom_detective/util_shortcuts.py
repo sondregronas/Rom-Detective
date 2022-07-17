@@ -6,8 +6,9 @@ from pathlib import Path
 from win32com.client import Dispatch
 
 from rom_detective.class_indexer_item import IndexerItem
-from rom_detective.class_indexer_platform import Platform
+from rom_detective.class_indexer_platform import Platform, PlatformFlag
 from rom_detective._const_ import DEFAULT_TARGET_FOLDER
+from rom_detective.class_logger import LoggerFlag
 
 
 def get_destination_folder(title: str, platform: Platform, target_folder: str = '',
@@ -68,11 +69,12 @@ def _create_shortcut(target_file: str, destination_file: str) -> dict:
     else:
         if not destination_file.endswith('.lnk'):
             destination_file += '.lnk'
+        # TODO: Replace Dispatch?
         shell = Dispatch('WScript.Shell')
         shortcut = shell.CreateShortCut(destination_file)
         shortcut.Targetpath = target_file
         shortcut.save()
-    return {'success': f'{destination_file}->{target_file}'}
+    return {LoggerFlag.SUCCESS: f'{destination_file}->{target_file}'}
 
 
 def _create_symlink(target_file: str, destination_file: str) -> dict:
@@ -87,9 +89,9 @@ def _create_symlink(target_file: str, destination_file: str) -> dict:
     except FileExistsError:
         # TODO: Overwrite? incase target_file has changed location
         print(f'Shortcut already exists for {target_file}, skipping')
-    except OSError as e: # pragma: no cover
+    except OSError as e:  # pragma: no cover
         raise RuntimeError(f'Missing Privileges to create symlinks, try running as admin. (Msg: {e})')
-    return {'success': f'{destination_file}->{target_file}'}
+    return {LoggerFlag.SUCCESS: f'{destination_file}->{target_file}'}
 
 
 def create_shortcut(console_item: IndexerItem, target_folder: str = '',
@@ -110,19 +112,18 @@ def create_shortcut(console_item: IndexerItem, target_folder: str = '',
                    true: simulates creation of folders and shortcuts in terminal
     """
     if console_item.blacklisted and not console_item.whitelisted:
-        return {'blacklist': f'{console_item.source} [{console_item.filename}]'}
+        return {LoggerFlag.BLACKLIST: f'{console_item.source} [{console_item.filename}]'}
 
     methods = {
-        'win': _create_shortcut,
-        'default': _create_symlink
+        PlatformFlag.STEAM: _create_shortcut,
+        PlatformFlag.DEF_ROM: _create_symlink
     }
 
-    method = methods[console_item.platform.id] if methods.get(console_item.platform.id) else methods['default']
     destination = get_destination_folder(console_item.filename, console_item.platform, target_folder=target_folder,
                                          fullname=fullname, dry_run=dry_run)
 
     # Dry run - don't create symlinks
     if dry_run:
-        return {'dry_run': f'{destination}->{console_item.source}'}
+        return {LoggerFlag.DRY_RUN: f'{destination}->{console_item.source}'}
 
-    return method(target_file=console_item.source, destination_file=destination)
+    return methods[console_item.platform.flag](target_file=console_item.source, destination_file=destination)

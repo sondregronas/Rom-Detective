@@ -12,7 +12,7 @@ ILLEGAL_CHARACTERS = ':®©™*"–/|<>?!'
 
 # ROOT_FOLDER
 if getattr(sys, 'frozen', False):
-    ROOT_FOLDER = os.path.dirname(sys.executable) # pragma: no cover
+    ROOT_FOLDER = os.path.dirname(sys.executable)  # pragma: no cover
 else:
     ROOT_FOLDER = (Path(os.path.abspath(__file__)).parents[2])
 

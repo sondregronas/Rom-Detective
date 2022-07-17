@@ -1,4 +1,14 @@
 from pathlib import Path
+from dataclasses import dataclass
+
+
+@dataclass
+class LoggerFlag:
+    SUCCESS = 'success'
+    BLACKLIST = 'blacklist'
+    DRY_RUN = 'dry_run'
+    PLATFORMS = 'platforms'
+
 
 """
 Logger
@@ -8,7 +18,7 @@ Holds logs in a dict with 4 key values:
 
 From create_shortcut:
     'blacklist': list() -> list of items that have not been processed blacklisted ({source})
-    'success' or 'dry_run': list() -> list of items that were succesful ({shortcut}->{source})
+    'success' or 'dry_run': list() -> list of items that were successful ({shortcut}->{source})
 
 From platforms:
     'platforms': list() -> list of ({platform_source}->{platform_name})
@@ -18,18 +28,17 @@ From platforms:
 class Logger:
     """Logger Class"""
     def __init__(self):
-        # TODO: Change keys to enum values?
         self.log = dict({
-            'blacklist': list(),
-            'success': list(),
-            'dry_run': list(),
-            'platforms': list(),
+            LoggerFlag.BLACKLIST: list(),
+            LoggerFlag.SUCCESS: list(),
+            LoggerFlag.DRY_RUN: list(),
+            LoggerFlag.PLATFORMS: list(),
         })
         self.log_files: dict = dict({
-            'blacklist': 'blacklist.log',
-            'success': 'active_shortcuts.log',
-            'platforms': 'platforms.log'
-            # 'dry_run': 'dev_dry_run.log'
+            LoggerFlag.BLACKLIST: 'blacklist.log',
+            LoggerFlag.SUCCESS: 'active_shortcuts.log',
+            LoggerFlag.DRY_RUN: 'platforms.log'
+            # LoggerFlag.PLATFORMS: 'dev_dry_run.log'
         })
 
     def add(self, entry: dict) -> None:
@@ -39,22 +48,22 @@ class Logger:
     @property
     def successful(self):
         """Returns amount of lines in success or dry_run"""
-        return len(self.log['success']) + len(self.log['dry_run'])
+        return len(self.log[LoggerFlag.SUCCESS]) + len(self.log[LoggerFlag.DRY_RUN])
 
     @property
     def blacklisted(self):
         """Returns amount of blacklisted items"""
-        return len(self.log['blacklist'])
+        return len(self.log[LoggerFlag.BLACKLIST])
 
     @property
     def platforms(self):
         """Returns amount of platforms"""
-        return len(self.log['platforms'])
+        return len(self.log[LoggerFlag.PLATFORMS])
 
     @property
     def total(self):
         """Returns sum of all entries, excluding platforms"""
-        return sum([len(self.log[key]) for key in ['blacklist', 'success', 'dry_run']])
+        return sum([len(self.log[key]) for key in [LoggerFlag.BLACKLIST, LoggerFlag.SUCCESS, LoggerFlag.DRY_RUN]])
 
     def load(self, path: str) -> None:
         """Load a series of old log files, will be used to compare"""
@@ -66,7 +75,7 @@ class Logger:
 
         Returns True if log is written, False if it is skipped
         """
-        if not self.log['success'] and self.successful:
+        if not self.log[LoggerFlag.SUCCESS] and self.successful:
             print(f"Would've written {self.successful} entries to active_shortcuts.log\n"
                   f"and {self.blacklisted} entries to blacklist.log (DRY_RUN)")
             return False

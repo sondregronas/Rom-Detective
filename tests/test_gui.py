@@ -1,7 +1,7 @@
 import pytest
 
 from rom_detective._globals_ import PLATFORMS
-from rom_detective.class_gui import RomDetectiveGui
+from rom_detective.class_gui import RomDetectiveGui, GuiItemFlag
 from rom_detective.class_indexer_item import IndexerItem
 
 from test_const import TEST_FILES_PATH, TEST_ROMS_PATH
@@ -35,14 +35,11 @@ def test_gui_steam_folder():
 
     # Add Steam Folder and ensure a windows platform is added
     assert PLATFORMS['win'] not in test_gui.platforms.values()
-    assert PLATFORMS['win'] not in test_gui.win_platforms.values()
     assert f'{TEST_FILES_PATH}\\steam' not in test_gui.platforms.keys()
-    assert f'{TEST_FILES_PATH}\\steam' not in test_gui.win_platforms.keys()
 
     test_gui.add_steam_folder(f'{TEST_FILES_PATH}\\steam')
 
     assert f'{TEST_FILES_PATH}\\steam' in test_gui.platforms.keys()
-    assert f'{TEST_FILES_PATH}\\steam' in test_gui.win_platforms.keys()
 
     # Overwrite steam folder
     test_gui.add_steam_folder(f'{TEST_FILES_PATH}\\steam2')
@@ -54,7 +51,6 @@ def test_gui_steam_folder():
     assert f'{TEST_FILES_PATH}\\steam' not in test_gui.platforms.keys()
     assert f'{TEST_FILES_PATH}\\steam2' not in test_gui.platforms.keys()
     assert PLATFORMS['win'] not in test_gui.platforms.values()
-    assert PLATFORMS['win'] not in test_gui.win_platforms.values()
 
 
 def test_gui_index():
@@ -68,21 +64,21 @@ def test_gui_index():
 
     # 19 games should added in total
     assert len(test_gui.games) == 19
-    assert len(test_gui.stats['indexed']) == 13
-    assert len(test_gui.stats['blacklisted']) == 6
-    assert len(test_gui.stats['whitelisted']) == 0
+    assert len(test_gui.stats[GuiItemFlag.INDEXED]) == 13
+    assert len(test_gui.stats[GuiItemFlag.BLACKLISTED]) == 6
+    assert len(test_gui.stats[GuiItemFlag.WHITELISTED]) == 0
 
     # Ensure games return IndexerItems
     for game in test_gui.games:
         assert issubclass(type(game), IndexerItem)
 
     # 1 blacklisted steam game, 2 indexed
-    assert len(test_gui.stats_by_platform(PLATFORMS['win'])['blacklisted']) == 1
-    assert len(test_gui.stats_by_platform(PLATFORMS['win'])['whitelisted']) == 0
-    assert len(test_gui.stats_by_platform(PLATFORMS['win'])['indexed']) == 2
+    assert len(test_gui.stats_by_platform(PLATFORMS['win'])[GuiItemFlag.BLACKLISTED]) == 1
+    assert len(test_gui.stats_by_platform(PLATFORMS['win'])[GuiItemFlag.WHITELISTED]) == 0
+    assert len(test_gui.stats_by_platform(PLATFORMS['win'])[GuiItemFlag.INDEXED]) == 2
 
     # 3 indexed n64 games
-    assert len(test_gui.stats_by_platform(PLATFORMS['n64'])['indexed']) == 3
+    assert len(test_gui.stats_by_platform(PLATFORMS['n64'])[GuiItemFlag.INDEXED]) == 3
 
 
 def test_force_platform():
@@ -118,10 +114,20 @@ def test_modify_indexed_folders():
     assert len(test_gui.platforms) == 4
 
     # Ensure ROM folders can be classified as win_platforms, and vice versa
-    assert f'{TEST_ROMS_PATH}\\n64' not in test_gui.win_platforms.keys()
+    assert PLATFORMS['win'] != test_gui.platforms[f'{TEST_ROMS_PATH}\\n64']
     test_gui.specify_platform(f'{TEST_ROMS_PATH}\\n64', PLATFORMS['win'])
-    assert f'{TEST_ROMS_PATH}\\n64' in test_gui.win_platforms.keys()
+    assert PLATFORMS['win'] == test_gui.platforms[f'{TEST_ROMS_PATH}\\n64']
 
-    assert f'{TEST_FILES_PATH}\\steam' not in test_gui.rom_platforms.keys()
+    assert f'{TEST_FILES_PATH}\\steam' not in test_gui.platforms.keys()
     test_gui.specify_platform(f'{TEST_FILES_PATH}\\steam', PLATFORMS['n64'])
-    assert f'{TEST_FILES_PATH}\\steam' in test_gui.rom_platforms.keys()
+    assert f'{TEST_FILES_PATH}\\steam' in test_gui.platforms.keys()
+    assert PLATFORMS['n64'] == test_gui.platforms[f'{TEST_FILES_PATH}\\steam']
+
+
+def test_index_platform_from_path():
+    test_gui = RomDetectiveGui()
+    test_gui.add_folder_roms(TEST_ROMS_PATH)
+
+    assert len(test_gui.games) == 0
+    test_gui.index_platform_from_path(f'{TEST_ROMS_PATH}\\n64')
+    assert len(test_gui.games) >= 1

@@ -1,7 +1,4 @@
-import pytest
-
-
-from rom_detective.util_main import(
+from rom_detective.util_main import (
     identify_platform_from_path,
     identify_platforms_from_path,
     index_roms_from_dict
@@ -27,5 +24,3 @@ def test_identify_platform_exception(capfd):
     out, err = capfd.readouterr()
     # Assert something is printed (a warning)
     assert out
-
-

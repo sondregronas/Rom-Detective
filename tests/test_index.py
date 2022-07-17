@@ -1,14 +1,13 @@
 from rom_detective.class_indexer_item import IndexerItem
 
-from rom_detective.subclass_consoles import PS3IndexItem, WiiUIndexItem
+from rom_detective.subclass_consoles import WiiUIndexItem
 
 from rom_detective.util_index import (
     index_ps3_folder,
     index_switch_folder,
     index_wiiu_folder,
     index_steam_library,
-    index_folder_from_platform,
-    list_subfolders
+    index_rom_folder_from_platform,
 )
 
 from test_const import TEST_ROMS_PATH, TEST_FILES_PATH
@@ -53,8 +52,8 @@ def test_index_steam_library():
 
 
 def test_index_generic_from_platform():
-    roms = index_folder_from_platform(f'{TEST_ROMS_PATH}\\wiiu', PLATFORMS['wiiu'])
+    roms = index_rom_folder_from_platform(f'{TEST_ROMS_PATH}\\wiiu', PLATFORMS['wiiu'])
     assert len(roms) == 5
 
-    roms = index_folder_from_platform(f'{TEST_ROMS_PATH}\\n64', PLATFORMS['n64'])
+    roms = index_rom_folder_from_platform(f'{TEST_ROMS_PATH}\\n64', PLATFORMS['n64'])
     assert len(roms) == 3

@@ -4,17 +4,25 @@ from dataclasses import dataclass
 
 
 @dataclass
+class PlatformFlag:
+    DEF_ROM = 'default'
+    STEAM = 'steam'
+
+
+@dataclass
 class Platform:
     """
     id: 'n64', 'win'
     name: 'Nintendo 64', 'Windows'
     aliases: ['nintendo64', +'nintendo 64', +'n64'],
              ['win10','win11','windows10','windows11', +'windows', +'win']
+    flag: PlatformFlag.DEFAULT (Used to differentiate special platforms that require special methods)
     """
     id: str
     name: str
     aliases: list[str]
     extensions: list[str]
+    flag = PlatformFlag.DEF_ROM
 
     def __str__(self) -> str:
         return f'Platform: {self.name} ({self.id}). Aliases={self.aliases}'

@@ -1,7 +1,7 @@
 from rom_detective.class_indexer_item import IndexerItem
-from rom_detective.class_indexer_platform import Platform, identify_platform
-from rom_detective.util_index import list_subfolders, index_folder_from_platform
-from rom_detective._globals_ import PLATFORMS_RAW
+from rom_detective.class_indexer_platform import Platform, identify_platform, PlatformFlag
+from rom_detective.util_index import list_subfolders, index_rom_folder_from_platform
+from rom_detective._globals_ import PLATFORMS
 
 
 def identify_platform_from_path(path: str) -> Platform:
@@ -10,7 +10,7 @@ def identify_platform_from_path(path: str) -> Platform:
     matches any of the alias entries in 'data/platforms.yaml'
     """
     try:
-        return identify_platform(path, PLATFORMS_RAW)
+        return identify_platform(path, PLATFORMS.values())
     except Warning as e:
         print(e)
 
@@ -34,8 +34,8 @@ def index_roms_from_dict(pairs: dict) -> list[IndexerItem]:
 
     returns a list of IndexerItems (ROMs)
     """
-    filtered_pairs = {k: v for k, v in pairs.items() if v}
+    filtered_pairs = {k: v for k, v in pairs.items() if v and v.flag == PlatformFlag.DEF_ROM}
     roms = list()
     for path in filtered_pairs:
-        roms += index_folder_from_platform(path, filtered_pairs[path])
+        roms += index_rom_folder_from_platform(path, filtered_pairs[path])
     return roms

@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 
 from rom_detective.class_indexer_item import IndexerItem
-from rom_detective.class_indexer_platform import Platform
+from rom_detective.class_indexer_platform import Platform, PlatformFlag
 from rom_detective._globals_ import PLATFORMS, DATABASES
 
 
@@ -15,6 +15,7 @@ class SteamLibraryIndexItem(IndexerItem):
     """
     source input: dict(steam_folder: game_id)
     source output: URL to steam://rungameid/<id>
+    platform.flag = PlatformFlag.STEAM
     """
     source: any = None
     platform: Platform = PLATFORMS['win']
@@ -28,6 +29,7 @@ class SteamLibraryIndexItem(IndexerItem):
     def subclass_init(self) -> None:
         """Get steam game name from the .acf file and set source to the rungameid url"""
         self.g_id: str = list(self.source.values())[0]
+        self.platform.flag = PlatformFlag.STEAM
         self.filename = self.get_steam_name()
         self.source = f'URL=steam://rungameid/{self.g_id}'
         self.clean_brackets = False
