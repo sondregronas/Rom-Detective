@@ -62,20 +62,6 @@ def identify_platform(path_or_alias: str, platforms: list[Platform]) -> Platform
     raise Warning(f"Could not find a platform for {path_or_alias}")
 
 
-def identify_platform_from_id(platform_id: str, platforms: list[Platform]) -> Platform:
-    """
-    Takes a str of a platform id and optionally a list of Platforms
-
-    and returns the corresponding platform, if it matches
-
-    Raises a warning if no platform is identified
-    """
-    output = [x for x in platforms if x.id == platform_id]
-    if not output:
-        raise Warning(f"Could not find a platform for {platform_id}")
-    return output[0]
-
-
 def identify_platform_from_path(path: str, platforms: list[Platform]) -> Platform:
     """
     Returns a single platform if a folder name in the given path

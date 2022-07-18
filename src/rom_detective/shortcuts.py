@@ -108,7 +108,7 @@ def create_shortcut(item: Item, target_folder: str = '',
     if dry_run:
         return {LoggerFlag.DRY_RUN: f'{destination}->{item.source}'}
 
-    if item.extension == '.url':
+    if item.extension.lower() == '.url':
         return _create_shortcut(target_file=item.source, destination_file=destination)
     else:
         return _create_symlink(target_file=item.source, destination_file=destination)
