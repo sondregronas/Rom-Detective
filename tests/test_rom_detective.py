@@ -32,7 +32,7 @@ def test_simulate_user():
 @pytest.mark.createfiles(reason='Creates folders & files, use --create-files flag to run')
 def test_create_shortcuts():
     with pytest.raises(RuntimeError):
-        initialize_folder(f'{TEST_FILES_PATH}\\test_startup')
+        initialize_folder(f'{TEST_FILES_PATH}\\test_startup_nonexistantfolder')
 
     initialize_folder(f'{TEST_FILES_PATH}\\test_startup')
 
