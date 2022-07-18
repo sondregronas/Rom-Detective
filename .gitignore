@@ -2,6 +2,7 @@ temp.bat
 old_tests/
 config/
 logs/
+!example_files/config
 tests/test_files/test_startup/config/
 tests/test_files/test_startup/logs/
 
