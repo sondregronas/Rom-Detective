@@ -1,6 +1,8 @@
 temp.bat
 config/
 logs/
+tests/test_files/test_startup/config/
+tests/test_files/test_startup/logs/
 
 # Media
 *.psd

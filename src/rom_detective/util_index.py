@@ -98,7 +98,7 @@ def index_steam_library(primary_steam_dir: str) -> list[SteamLibraryIndexItem]:
     output = list()
     try:
         steam_vdf = vdf.load(open(f'{primary_steam_dir}\\steamapps\\libraryfolders.vdf'))
-    except FileNotFoundError:
+    except FileNotFoundError:  # pragma: no cover
         print(f'The provided Steam directory is invalid ({primary_steam_dir})')
         return output
 
