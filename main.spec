@@ -5,6 +5,7 @@
 # src/
 # main.ico
 # main.spec
+# readme.txt
 
 block_cipher = None
 
@@ -19,6 +20,7 @@ a = Analysis(
                    'vdf',
                    'yaml',
                    'winshell',
+                   'glob',
                    'pathlib.Path',
                    'xml.dom.minidom',
                    'dataclasses.dataclass',

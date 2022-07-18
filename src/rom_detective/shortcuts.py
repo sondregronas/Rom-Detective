@@ -1,14 +1,13 @@
 __all__ = ['create_shortcut', 'get_destination_folder']
 
 import os
-
 from pathlib import Path
-from win32com.client import Dispatch
+from win32com.client import Dispatch  # TODO: Replace Dispatch?
 
-from rom_detective.class_indexer_item import IndexerItem
-from rom_detective.class_indexer_platform import Platform, PlatformFlag
-from rom_detective._const_ import DEFAULT_TARGET_FOLDER
-from rom_detective.class_logger import LoggerFlag
+from rom_detective import DEFAULT_TARGET_FOLDER
+from rom_detective.item import Item
+from rom_detective.platforms import Platform, PlatformFlag
+from rom_detective.logger import LoggerFlag
 
 
 def get_destination_folder(title: str, platform: Platform, target_folder: str = '',
@@ -25,7 +24,7 @@ def get_destination_folder(title: str, platform: Platform, target_folder: str = 
                    false: the platform id will be used as the folder name (n64)
 
                    dry_run: bool (default: False)
-                   true: simulates creation of folders in terminal
+                   true: does not create any folders
     """
     destination = target_folder
 
@@ -41,7 +40,7 @@ def get_destination_folder(title: str, platform: Platform, target_folder: str = 
     if dry_run:
         return destination
 
-    # Create ROMs directory if it does not exist AND no destination folder is specified
+    # Create ROMs directory if it does not exist AND no destination folder is manually specified
     if not os.path.exists(Path(destination).parents[1]) and default_location:
         print(f'Created directory {Path(destination).parents[1]}')
         os.makedirs(Path(destination).parent)
@@ -94,7 +93,7 @@ def _create_symlink(target_file: str, destination_file: str) -> dict:
     return {LoggerFlag.SUCCESS: f'{destination_file}->{target_file}'}
 
 
-def create_shortcut(console_item: IndexerItem, target_folder: str = '',
+def create_shortcut(item: Item, target_folder: str = '',
                     fullname: bool = True, dry_run: bool = False) -> dict:
     """
     Takes a ConsoleIndexerItem object and the target_folder for where to store all shortcuts,
@@ -111,19 +110,18 @@ def create_shortcut(console_item: IndexerItem, target_folder: str = '',
                    dry_run: bool (default: False)
                    true: simulates creation of folders and shortcuts in terminal
     """
-    if console_item.blacklisted and not console_item.whitelisted:
-        return {LoggerFlag.BLACKLIST: f'{console_item.source} [{console_item.filename}]'}
+    if item.blacklisted and not item.whitelisted:
+        return {LoggerFlag.BLACKLIST: f'{item.source} [{item.filename}]'}
 
     methods = {
         PlatformFlag.STEAM: _create_shortcut,
         PlatformFlag.DEF_ROM: _create_symlink
     }
 
-    destination = get_destination_folder(console_item.filename, console_item.platform, target_folder=target_folder,
+    destination = get_destination_folder(item.filename, item.platform, target_folder=target_folder,
                                          fullname=fullname, dry_run=dry_run)
 
     # Dry run - don't create symlinks
     if dry_run:
-        return {LoggerFlag.DRY_RUN: f'{destination}->{console_item.source}'}
-
-    return methods[console_item.platform.flag](target_file=console_item.source, destination_file=destination)
+        return {LoggerFlag.DRY_RUN: f'{destination}->{item.source}'}
+    return methods[item.platform.flag](target_file=item.source, destination_file=destination)

@@ -37,31 +37,30 @@ class Logger:
         self.log_files: dict = dict({
             LoggerFlag.BLACKLIST: 'blacklist.log',
             LoggerFlag.SUCCESS: 'active_shortcuts.log',
-            LoggerFlag.DRY_RUN: 'platforms.log'
-            # LoggerFlag.PLATFORMS: 'dev_dry_run.log'
+            LoggerFlag.DRY_RUN: 'platforms.log',
         })
 
     def add(self, entry: dict) -> None:
         """Add an entry to the log, takes a dict of {<log_type>: string}"""
-        self.log[list(entry.keys())[0]] += [entry[list(entry.keys())[0]]]
+        self.log[list(entry.keys())[0]] += [entry.values()]
 
     @property
-    def successful(self):
+    def successful(self) -> int:
         """Returns amount of lines in success or dry_run"""
         return len(self.log[LoggerFlag.SUCCESS]) + len(self.log[LoggerFlag.DRY_RUN])
 
     @property
-    def blacklisted(self):
+    def blacklisted(self) -> int:
         """Returns amount of blacklisted items"""
         return len(self.log[LoggerFlag.BLACKLIST])
 
     @property
-    def platforms(self):
+    def platforms(self) -> int:
         """Returns amount of platforms"""
         return len(self.log[LoggerFlag.PLATFORMS])
 
     @property
-    def total(self):
+    def total(self) -> int:
         """Returns sum of all entries, excluding platforms"""
         return sum([len(self.log[key]) for key in [LoggerFlag.BLACKLIST, LoggerFlag.SUCCESS, LoggerFlag.DRY_RUN]])
 
@@ -75,7 +74,7 @@ class Logger:
 
         Returns True if log is written, False if it is skipped
         """
-        if not self.log[LoggerFlag.SUCCESS] and self.successful:
+        if len(self.log[LoggerFlag.DRY_RUN]):
             print(f"Would've written {self.successful} entries to active_shortcuts.log\n"
                   f"and {self.blacklisted} entries to blacklist.log (DRY_RUN)")
             return False
@@ -85,7 +84,7 @@ class Logger:
             if not Path(path_dir).is_dir():
                 Path(path_dir).mkdir(exist_ok=True)
         else:
-            raise RuntimeError(f'Cannot find directory {Path(path_dir).parent}')
+            raise RuntimeError(f'Invalid directory: {Path(path_dir).parent}')
 
         for key, logfile in self.log_files.items():
             target = f'{path_dir}\\{logfile}'
@@ -93,6 +92,7 @@ class Logger:
                 file = open(target, "w+", encoding='utf-8')
                 file.write('\n'.join(self.log[key]))
                 file.close()
+
         return True
 
     def __str__(self):

@@ -1,43 +1,35 @@
 from dataclasses import dataclass, field
 
-from rom_detective._globals_ import PLATFORMS
-from rom_detective._const_ import ROOT_FOLDER
+from rom_detective import ROOT_FOLDER
+from rom_detective.const import PLATFORMS
 
-from rom_detective.class_logger import Logger, LoggerFlag
-from rom_detective.class_indexer_item import IndexerItem
-from rom_detective.class_indexer_platform import Platform, PlatformFlag
+from rom_detective.logger import Logger, LoggerFlag
+from rom_detective.item import Item, index_pairs, index_steam_library
+from rom_detective.util import identify_platforms_from_path
+from rom_detective.platforms import Platform, PlatformFlag, identify_platform_from_path
 
-from rom_detective.util_main import (
-    identify_platform_from_path,
-    identify_platforms_from_path,
-    index_roms_from_dict,
-)
-from rom_detective.util_index import (
-    index_steam_library,
-)
-
-from rom_detective.util_shortcuts import create_shortcut
+from rom_detective.shortcuts import create_shortcut
 
 
 @dataclass
-class GuiItemFlag:
+class RDFlag:
     INDEXED = 'indexed'
     WHITELISTED = 'whitelisted'
     BLACKLISTED = 'blacklisted'
 
 
 """
-RomDetectiveGui
+RomDetective (GUI)
 ===============
 Work in progress
 """
 
 
 @dataclass
-class RomDetectiveGui:
+class RomDetective:
     logger: Logger = field(init=False, default=Logger())
     platforms: dict[str, Platform] = field(init=False, default_factory=dict)
-    games: list[IndexerItem] = field(init=False, default_factory=list)
+    games: list[Item] = field(init=False, default_factory=list)
     stats: dict[str, list] = field(init=False, default_factory=dict)
     is_indexed: bool = field(init=False, default=False)
     _steam_folder: str = field(init=False, default_factory=str)
@@ -82,14 +74,14 @@ class RomDetectiveGui:
         self.games = list()
 
     # TODO: Maybe make this be a button?
-    def index_platform_from_path(self, path: str, update_stats=True) -> list[IndexerItem]:
+    def index_platform_from_path(self, path: str, update_stats=True) -> list[Item]:
         """Index ROMs/Games from a specific platform"""
         if not self.platforms[path]:
             print(f'{path} is not tied to any platform, skipping')
 
         # Default ROMs
         if self.platforms[path].flag == PlatformFlag.DEF_ROM:
-            self.games += index_roms_from_dict({path: self.platforms[path]})
+            self.games += index_pairs({path: self.platforms[path]})
 
         # Steam library
         elif self.platforms[path].flag == PlatformFlag.STEAM:
@@ -108,9 +100,9 @@ class RomDetectiveGui:
         """Deletes self.stats, then rebuilds it"""
         del self.stats
         self.stats = dict()
-        self.stats[GuiItemFlag.WHITELISTED] = [game for game in self.games if game.whitelisted]
-        self.stats[GuiItemFlag.BLACKLISTED] = [game for game in self.games if game.blacklisted and not game.whitelisted]
-        self.stats[GuiItemFlag.INDEXED] = [game for game in self.games if not game.blacklisted or game.whitelisted]
+        self.stats[RDFlag.WHITELISTED] = [game for game in self.games if game.whitelisted]
+        self.stats[RDFlag.BLACKLISTED] = [game for game in self.games if game.blacklisted and not game.whitelisted]
+        self.stats[RDFlag.INDEXED] = [game for game in self.games if not game.blacklisted or game.whitelisted]
         return self.stats
 
     """
@@ -130,7 +122,7 @@ class RomDetectiveGui:
 
         If none found - allow user to specify manually. User should also be able to override the platform
         """
-        platform = identify_platform_from_path(path)
+        platform = identify_platform_from_path(path, platforms=PLATFORMS)
         if platform:
             platforms = {path: platform}
         else:
@@ -214,9 +206,9 @@ class RomDetectiveGui:
 
     def stats_by_platform(self, platform: Platform) -> dict:
         """Get the stats for a given platform"""
-        return {GuiItemFlag.WHITELISTED: [game for game in self.stats[GuiItemFlag.WHITELISTED] if game.platform == platform],
-                GuiItemFlag.BLACKLISTED: [game for game in self.stats[GuiItemFlag.BLACKLISTED] if game.platform == platform],
-                GuiItemFlag.INDEXED: [game for game in self.stats[GuiItemFlag.INDEXED] if game.platform == platform]}
+        return {RDFlag.WHITELISTED: [game for game in self.stats[RDFlag.WHITELISTED] if game.platform == platform],
+                RDFlag.BLACKLISTED: [game for game in self.stats[RDFlag.BLACKLISTED] if game.platform == platform],
+                RDFlag.INDEXED: [game for game in self.stats[RDFlag.INDEXED] if game.platform == platform]}
 
     """
         End Statistics / Console

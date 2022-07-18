@@ -1,4 +1,5 @@
 temp.bat
+old_tests/
 config/
 logs/
 tests/test_files/test_startup/config/
