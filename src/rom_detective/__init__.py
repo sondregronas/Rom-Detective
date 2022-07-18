@@ -20,7 +20,11 @@ def initialize_folder(path: str = ROOT_FOLDER) -> bool:
     """
     Spawn relevant files and folders upon startup, if they don't already exist
     (config directory and files and logs directory)
+
+    Returns False if config file did not exist
     """
+    first_run = True
+
     if not Path(path).exists():
         raise RuntimeError(f'{path} is not a valid folder for initialization.')
 
@@ -57,6 +61,7 @@ def initialize_folder(path: str = ROOT_FOLDER) -> bool:
     if not whitelist_cfg.exists():
         open(whitelist_cfg, 'w+').write(whitelist_cfg_content)
     if not config_cfg.exists():
+        first_run = False
         open(config_cfg, 'w+').write(config_cfg_content)
 
-    return True
+    return first_run

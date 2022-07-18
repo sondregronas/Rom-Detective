@@ -1,6 +1,7 @@
 from dataclasses import dataclass, field
+from pathlib import Path
 
-from rom_detective import ROOT_FOLDER
+from rom_detective import ROOT_FOLDER, CONF_FOLDER, DEFAULT_TARGET_FOLDER
 from rom_detective.const import PLATFORMS
 
 from rom_detective.logger import Logger, LoggerFlag
@@ -28,19 +29,55 @@ Work in progress
 @dataclass
 class RomDetective:
     logger: Logger = field(init=False, default=Logger())
+    target_folder: str = field(init=False, default=DEFAULT_TARGET_FOLDER)
     platforms: dict[str, Platform] = field(init=False, default_factory=dict)
     games: list[Item] = field(init=False, default_factory=list)
     stats: dict[str, list] = field(init=False, default_factory=dict)
     is_indexed: bool = field(init=False, default=False)
     _steam_folder: str = field(init=False, default_factory=str)
 
-    def load_config(self, path):  # pragma: no cover
-        """Perform on load"""
-        raise NotImplementedError
+    def _load_platform(self, path: str, platform: Platform, flag: str):
+        if flag == PlatformFlag.STEAM:
+            self.add_steam_folder(path)
+        else:
+            self.add_rom_folder(path, platform=platform)
 
-    def save_config(self, path):  # pragma: no cover
+    def load_config(self, file: str = f'{CONF_FOLDER}\\config.cfg'):
+        """Loads config file"""
+        try:
+            conf_file = open(file, 'r', encoding='utf-8').read().strip()
+        except FileNotFoundError:
+            raise Warning(f'Could not load config file {file}')
+
+        self._reset_platforms()
+        for line in conf_file.split('\n'):
+            # Ignore comments
+            if line.strip().startswith('#'):
+                continue
+
+            # Update target_folder
+            if line.startswith('TARGET_FOLDER=='):
+                self.target_folder = line.split('TARGET_FOLDER==')[1]
+                continue
+
+            # Update platforms
+            p_flag, p_id, path = line.split(':::')
+            if Path(path).exists():
+                self._load_platform(path, platform=PLATFORMS[p_id], flag=p_flag)
+            else:
+                print(f'The directory for {p_id} was invalid ({path})')
+
+        # Raise a warning if no platforms were added (empty config file)
+        if not self.platforms:
+            raise Warning('Config file is empty')
+
+    def save_config(self, file = f'{CONF_FOLDER}\\config.cfg'):
         """Perform on exit"""
-        raise NotImplementedError
+        f = open(file, 'w+', encoding='utf-8')
+        f.write(f'TARGET_FOLDER=={self.target_folder}\n')
+        f.write(''.join(f'{platform.flag}:::{platform.id}:::{path}\n'
+                        for path, platform in self.platforms.items()))
+        f.close()
 
     """
     ##########################################
@@ -52,14 +89,12 @@ class RomDetective:
         """Getter for _steam_folder"""
         return self._steam_folder
 
+    def _reset_platforms(self):
+        self.platforms = dict()
+        self._platform_changes_made()
+
     def _platform_changes_made(self) -> None:
         """Called when changes are made"""
-
-        # Clear platforms from logger, then re-add valid platforms
-        self.logger.log[LoggerFlag.PLATFORMS] = list()
-        [self.logger.add({LoggerFlag.PLATFORMS: f'{path}->{platform.name}'})
-         for path, platform in self.platforms.items() if platform]
-
         if self.is_indexed:
             self.is_indexed = False
             self._reset_games()
@@ -115,14 +150,14 @@ class RomDetective:
         Button actions
     """
 
-    def add_rom_folder(self, path: str) -> None:
+    def add_rom_folder(self, path: str, platform: Platform = None) -> None:
         """
         Add a new folder and try to identify the platform,
         if none specified, attempt to identify its subdirectories (1 layer)
 
         If none found - allow user to specify manually. User should also be able to override the platform
         """
-        platform = identify_platform_from_path(path, platforms=PLATFORMS)
+        platform = identify_platform_from_path(path, platforms=PLATFORMS) if not platform else platform
         if platform:
             platforms = {path: platform}
         else:

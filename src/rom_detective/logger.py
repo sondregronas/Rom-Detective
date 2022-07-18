@@ -37,12 +37,11 @@ class Logger:
         self.log_files: dict = dict({
             LoggerFlag.BLACKLIST: 'blacklist.log',
             LoggerFlag.SUCCESS: 'active_shortcuts.log',
-            LoggerFlag.DRY_RUN: 'platforms.log',
         })
 
     def add(self, entry: dict) -> None:
         """Add an entry to the log, takes a dict of {<log_type>: string}"""
-        self.log[list(entry.keys())[0]] += [entry.values()]
+        self.log[list(entry.keys())[0]] += entry.values()
 
     @property
     def successful(self) -> int:
