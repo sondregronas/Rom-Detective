@@ -1,10 +1,8 @@
 from rom_detective import ROOT_FOLDER, initialize_folder
 from rom_detective.rom_detective import RomDetective
 
-# TODO: GUI and plonk things into a class
-# TODO: Load from a .conf, created by a GUI
+# TODO: GUI
 # TODO: compare logs to current run in order to update shortcuts, delete missing, etc.
-# TODO: Replace winshell/win32com modules
 # TODO: Write new tests
 WRITE_LOG = True
 ROM_FOLDER = r'S:\ROMs'

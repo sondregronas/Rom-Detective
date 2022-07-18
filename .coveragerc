@@ -1,5 +1,6 @@
 [report]
 exclude_lines =
     pragma: no cover
-    def __str__(self):
-    def __repr__(self):
+    def __str__(self)
+    def __repr__(self)
+    raise NotImplementedError

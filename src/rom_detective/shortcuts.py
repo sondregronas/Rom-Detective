@@ -2,11 +2,10 @@ __all__ = ['create_shortcut', 'get_destination_folder']
 
 import os
 from pathlib import Path
-from win32com.client import Dispatch  # TODO: Replace Dispatch?
 
 from rom_detective import DEFAULT_TARGET_FOLDER
 from rom_detective.item import Item
-from rom_detective.platforms import Platform, PlatformFlag
+from rom_detective.platforms import Platform
 from rom_detective.logger import LoggerFlag
 
 
@@ -55,24 +54,13 @@ def get_destination_folder(title: str, platform: Platform, target_folder: str = 
 
 def _create_shortcut(target_file: str, destination_file: str) -> dict:
     """
-    Takes a target_file path and a destination_file and creates a shortcut
+    Takes a target_file path and a destination_file and creates an internet shortcut
     Returns string: f'{destination_file}-->{target_file}'
-
-    If shortcut_destination has a .url file extension, an internet shortcut is created
-    if not, a .lnk shortcut is created
     """
-    if destination_file.endswith('.url'):
-        with open(destination_file, 'w+', encoding="utf-8") as shortcut:
-            shortcut.write("[InternetShortcut]\n")
-            shortcut.write(f'{target_file}\n')
-    else:
-        if not destination_file.endswith('.lnk'):
-            destination_file += '.lnk'
-        # TODO: Replace Dispatch?
-        shell = Dispatch('WScript.Shell')
-        shortcut = shell.CreateShortCut(destination_file)
-        shortcut.Targetpath = target_file
-        shortcut.save()
+    with open(destination_file, 'w+', encoding="utf-8") as shortcut:
+        shortcut.write("[InternetShortcut]\n")
+        shortcut.write(f'{target_file}\n')
+
     return {LoggerFlag.SUCCESS: f'{destination_file}->{target_file}'}
 
 
@@ -96,7 +84,7 @@ def _create_symlink(target_file: str, destination_file: str) -> dict:
 def create_shortcut(item: Item, target_folder: str = '',
                     fullname: bool = True, dry_run: bool = False) -> dict:
     """
-    Takes a ConsoleIndexerItem object and the target_folder for where to store all shortcuts,
+    Takes an Item object and the target_folder for where to store all shortcuts,
     then creates a shortcut or symlink from the item source to the target folder
 
     Returns a dict of either {success:<item>} or {blacklisted:<item>}
@@ -113,15 +101,14 @@ def create_shortcut(item: Item, target_folder: str = '',
     if item.blacklisted and not item.whitelisted:
         return {LoggerFlag.BLACKLIST: f'{item.source} [{item.filename}]'}
 
-    methods = {
-        PlatformFlag.STEAM: _create_shortcut,
-        PlatformFlag.DEF_ROM: _create_symlink
-    }
-
     destination = get_destination_folder(item.filename, item.platform, target_folder=target_folder,
                                          fullname=fullname, dry_run=dry_run)
 
     # Dry run - don't create symlinks
     if dry_run:
         return {LoggerFlag.DRY_RUN: f'{destination}->{item.source}'}
-    return methods[item.platform.flag](target_file=item.source, destination_file=destination)
+
+    if item.extension == '.url':
+        return _create_shortcut(target_file=item.source, destination_file=destination)
+    else:
+        return _create_symlink(target_file=item.source, destination_file=destination)

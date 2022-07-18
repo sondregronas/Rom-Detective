@@ -19,13 +19,11 @@ a = Analysis(
                    're',
                    'vdf',
                    'yaml',
-                   'winshell',
                    'glob',
                    'pathlib.Path',
                    'xml.dom.minidom',
                    'dataclasses.dataclass',
                    'dataclasses.field',
-                   'win32com.client.Dispatch'
 	],
     hookspath=[],
     hooksconfig={},
