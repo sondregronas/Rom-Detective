@@ -14,7 +14,7 @@ def test_gui_rom_folders():
     assert not test_gui.platforms.values()
 
     # Add ALL roms from ROM folder
-    test_gui.add_folder_roms(TEST_ROMS_PATH)
+    test_gui.add_rom_folder(TEST_ROMS_PATH)
     assert PLATFORMS['wiiu'] in test_gui.platforms.values()
 
     # Remove Wii U folder from gui
@@ -25,7 +25,7 @@ def test_gui_rom_folders():
     assert before_removal > len(test_gui.platforms)
 
     # Re-add Wii U folder
-    test_gui.add_folder_roms(f'{TEST_ROMS_PATH}\\wiiu')
+    test_gui.add_rom_folder(f'{TEST_ROMS_PATH}\\wiiu')
     assert PLATFORMS['wiiu'] in test_gui.platforms.values()
     assert before_removal == len(test_gui.platforms)
 
@@ -56,7 +56,7 @@ def test_gui_steam_folder():
 def test_gui_index():
     test_gui = RomDetectiveGui()
 
-    test_gui.add_folder_roms(TEST_ROMS_PATH)
+    test_gui.add_rom_folder(TEST_ROMS_PATH)
     test_gui.add_steam_folder(f'{TEST_FILES_PATH}\\steam')
 
     assert len(test_gui.stats) == 0
@@ -84,7 +84,7 @@ def test_gui_index():
 def test_force_platform():
     test_gui = RomDetectiveGui()
 
-    test_gui.add_folder_roms(TEST_ROMS_PATH)
+    test_gui.add_rom_folder(TEST_ROMS_PATH)
     assert PLATFORMS['n64'] in test_gui.platforms.values()
     assert test_gui.platforms[f'{TEST_ROMS_PATH}\\n64'] == PLATFORMS['n64']
 
@@ -103,7 +103,7 @@ def test_force_platform():
 def test_modify_indexed_folders():
     test_gui = RomDetectiveGui()
 
-    test_gui.add_folder_roms(TEST_ROMS_PATH)
+    test_gui.add_rom_folder(TEST_ROMS_PATH)
     test_gui.add_steam_folder(f'{TEST_FILES_PATH}\\steam')
     test_gui.index_all()
     assert len(test_gui.games) == 19
@@ -126,7 +126,7 @@ def test_modify_indexed_folders():
 
 def test_index_platform_from_path():
     test_gui = RomDetectiveGui()
-    test_gui.add_folder_roms(TEST_ROMS_PATH)
+    test_gui.add_rom_folder(TEST_ROMS_PATH)
 
     assert len(test_gui.games) == 0
     test_gui.index_platform_from_path(f'{TEST_ROMS_PATH}\\n64')

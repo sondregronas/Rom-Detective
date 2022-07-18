@@ -9,12 +9,13 @@ from rom_detective.subclass_pc import SteamLibraryIndexItem
 from rom_detective._globals_ import PLATFORMS
 
 
-def list_all_of_type(directory: str, extensions: list) -> list[str]:
+def list_all_of_type(directory: str, extensions: list, recursive: bool = True) -> list[str]:
     """
     Takes a directory path to scan files from
     Returns abspath to ALL files matching any extension from a list of extensions
     """
-    return [file for file in glob.glob(f'{directory}\\**/*.*', recursive=True)
+    path = f'{directory}\\**/*.*' if recursive else f'{directory}\\*.*'
+    return [file for file in glob.glob(path, recursive=recursive)
             if os.path.splitext(file)[1] in extensions]
 
 
@@ -24,12 +25,13 @@ def list_subfolders(directory: str, children: int = 2) -> list[str]:
     of children and returns a list of abs-paths
     """
     output = list()
-    results = list([directory])
+    layer = list([directory])
     for i in range(children):
-        for directory in results.copy():
-            subdirs = next(os.walk(directory))
-            results = [f'{subdirs[0]}\\{subdir}' for subdir in subdirs[1]]
-            output += results
+        result = list()
+        for directory in layer:
+            result += [f'{directory}\\{subdir}' for subdir in next(os.walk(directory))[1]]
+        output += result
+        layer = result.copy()
     return output
 
 
@@ -72,12 +74,16 @@ def index_wiiu_folder(path: str) -> list[WiiUIndexItem]:
     all matching .wux and code/*.rpx entries
 
     Entries in 'update' or 'dlc' folders are blacklisted by the subclass
-
-    Note: This can be very slow as Wii U folders contain a lot of files
     """
-    return [WiiUIndexItem(source=file, platform=PLATFORMS['wiiu'])
-            for file in list_all_of_type(path, PLATFORMS['wiiu'].extensions)
-            if 'code' in file.lower() or file.lower().endswith('.wux')]
+    output = list()
+    relevant_folders = [path] + [folder for folder in list_subfolders(path, children=3)
+                                 if 'content' not in folder.split(path)[1].split('\\')
+                                 and 'meta' not in folder.split(path)[1].split('\\')]
+
+    for folder in relevant_folders:
+        output += [WiiUIndexItem(source=file, platform=PLATFORMS['wiiu'])
+                   for file in list_all_of_type(folder, PLATFORMS['wiiu'].extensions, recursive=False)]
+    return output
 
 
 def index_steam_library(primary_steam_dir: str) -> list[SteamLibraryIndexItem]:
@@ -97,10 +103,8 @@ def index_steam_library(primary_steam_dir: str) -> list[SteamLibraryIndexItem]:
         return output
 
     # Create a dict for every {path: list[game_id]}
-    path_id_pairs = {
-        steam_vdf['libraryfolders'][entries]['path']: steam_vdf['libraryfolders'][entries]['apps']
-        for entries in steam_vdf['libraryfolders']
-    }
+    path_id_pairs = {steam_vdf['libraryfolders'][entries]['path']: steam_vdf['libraryfolders'][entries]['apps']
+                     for entries in steam_vdf['libraryfolders']}
 
     for path, game_ids in path_id_pairs.items():
         output += [SteamLibraryIndexItem({path: game_id}) for game_id in game_ids]
@@ -109,6 +113,7 @@ def index_steam_library(primary_steam_dir: str) -> list[SteamLibraryIndexItem]:
 
 
 def index_rom_folder_from_platform(path: str, platform: Platform) -> list[IndexerItem]:
+    """Check if platform id is in methods, if not do 'default'"""
     methods = {
         'ps3': index_ps3_folder,
         'wiiu': index_wiiu_folder,

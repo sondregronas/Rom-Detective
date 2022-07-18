@@ -14,7 +14,17 @@ a = Analysis(
     pathex=[],
     binaries=[],
     datas=[('src/', '.')],
-    hiddenimports=[],
+    hiddenimports=['os',
+                   're',
+                   'vdf',
+                   'yaml',
+                   'winshell',
+                   'pathlib.Path',
+                   'xml.dom.minidom',
+                   'dataclasses.dataclass',
+                   'dataclasses.field',
+                   'win32com.client.Dispatch'
+	],
     hookspath=[],
     hooksconfig={},
     runtime_hooks=[],
@@ -51,4 +61,5 @@ exe = EXE(
 )
 
 import shutil
+shutil.copyfile('readme.txt', '{0}/readme.txt'.format(DISTPATH))
 shutil.copytree('data', '{0}/data'.format(DISTPATH))
