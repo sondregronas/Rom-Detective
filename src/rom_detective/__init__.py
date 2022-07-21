@@ -48,7 +48,9 @@ def initialize_folder(path: str = ROOT_FOLDER) -> bool:
 
     whitelist_cfg = Path(f'{config_folder}\\whitelist.cfg')
     whitelist_cfg_content = (
-        "# Empty for now. To be implemented.\n"
+        "# Path to ROMs or games that originally weren't allowed in, but allowed in by you. (Copy the source from blacklist)\n"
+        "# Example:\n"""
+        "# C:\\ROMs\\n64\\My Rom File.z64\""
     )
 
     config_cfg = Path(f'{config_folder}\\config.cfg')

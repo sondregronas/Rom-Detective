@@ -94,6 +94,9 @@ class Logger:
 
         return True
 
+    def reset(self):
+        self.__init__()
+
     def __str__(self):
         """String representation in console"""
         return f"\n" \

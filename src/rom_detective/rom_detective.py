@@ -1,7 +1,7 @@
 from dataclasses import dataclass, field
 from pathlib import Path
 
-from rom_detective import ROOT_FOLDER, CONF_FOLDER, DEFAULT_TARGET_FOLDER
+from rom_detective import ROOT_FOLDER, CONF_FOLDER, DEFAULT_TARGET_FOLDER, LOGS_FOLDER
 from rom_detective.const import PLATFORMS
 
 from rom_detective.logger import Logger, LoggerFlag
@@ -76,7 +76,8 @@ class RomDetective:
         f = open(file, 'w+', encoding='utf-8')
         f.write(f'TARGET_FOLDER=={self.target_folder}\n')
         f.write(''.join(f'{platform.flag}:::{platform.id}:::{path}\n'
-                        for path, platform in self.platforms.items()))
+                        for path, platform in self.platforms.items()
+                        if hasattr(platform, 'flag')))
         f.close()
 
     """
@@ -199,9 +200,7 @@ class RomDetective:
 
     def specify_platform(self, path: str, platform: Platform) -> None:
         """Overwrite the platform value for a given path"""
-        self.platforms.pop(path, None)
         self.platforms[path] = platform
-
         self._platform_changes_made()
 
     def index_all(self) -> None:
@@ -219,10 +218,10 @@ class RomDetective:
             return
         [self.logger.add(create_shortcut(game, dry_run=dry_run)) for game in self.games]
 
-        # Temp
         print(self.logger)
-        # if dry_run:
-        #    self.logger.write(path_dir=f'{ROOT_FOLDER}\\logs')
+        if not dry_run:
+            self.logger.write(path_dir=LOGS_FOLDER)
+        self.logger.reset()
 
     def index_and_create_shortcuts(self):
         """Indexes all platforms and creates shortcuts for the games"""

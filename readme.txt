@@ -1,5 +1,5 @@
 # Rom Detective
 
-This is an INCOMPLETE version, there's no GUI here, and it probably won't run properly unless you build it manually from source.
+This build is still in an early stage, things are not super user-friendly and things might crash.
 
 Source: https://github.com/sondregronas/Rom-Detective

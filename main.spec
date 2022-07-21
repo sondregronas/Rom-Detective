@@ -50,7 +50,7 @@ exe = EXE(
     upx=True,
     upx_exclude=[],
     runtime_tmpdir=None,
-    console=True,
+    console=False,
     disable_windowed_traceback=False,
     argv_emulation=False,
     target_arch=None,
@@ -61,5 +61,6 @@ exe = EXE(
 )
 
 import shutil
+shutil.copyfile('main.ico', '{0}/main.ico'.format(DISTPATH))
 shutil.copyfile('readme.txt', '{0}/readme.txt'.format(DISTPATH))
 shutil.copytree('data', '{0}/data'.format(DISTPATH))

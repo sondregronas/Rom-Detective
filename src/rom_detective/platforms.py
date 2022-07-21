@@ -35,7 +35,7 @@ class Platform:
 
     def matches_alias(self, alias) -> bool:
         """Boolean check if an alias matches that of the platform aliases"""
-        return True if alias in self.aliases else False
+        return True if alias.lower() in self.aliases else False
 
 
 def import_platforms(yaml_file: str) -> list[Platform]:
@@ -59,10 +59,10 @@ def identify_platform(path_or_alias: str, platforms: list[Platform]) -> Platform
         output = [x for x in platforms if x.matches_alias(folder)]
         if output:
             return output[0]
-    raise Warning(f"Could not find a platform for {path_or_alias}")
+    raise Warning(f"Warning: Could not find a platform for {path_or_alias}")
 
 
-def identify_platform_from_path(path: str, platforms: list[Platform]) -> Platform:
+def identify_platform_from_path(path: str, platforms: dict[str: list[Platform]]) -> Platform:
     """
     Returns a single platform if a folder name in the given path
     matches any of the alias entries in 'data/platforms.yaml'
