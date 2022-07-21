@@ -42,6 +42,4 @@ def test_create_shortcuts():
     rd.add_steam_folder(f'{TEST_FILES_PATH}\\steam')
 
     rd.index_and_create_shortcuts()
-    rd.logger.write(path_dir=f'{TEST_FILES_PATH}\\test_startup\\logs')
-    assert rd.logger.successful > 0
-    assert rd.logger.blacklisted > 0
+
