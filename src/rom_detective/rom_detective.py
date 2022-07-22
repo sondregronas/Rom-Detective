@@ -61,11 +61,12 @@ class RomDetective:
                 continue
 
             # Update platforms
-            p_flag, p_id, path = line.split(':::')
-            if Path(path).exists():
-                self._load_platform(path, platform=PLATFORMS[p_id], flag=p_flag)
-            else:
-                print(f'The directory for {p_id} was invalid ({path})')
+            if ':::' in line:
+                p_flag, p_id, path = line.split(':::')
+                if Path(path).exists():
+                    self._load_platform(path, platform=PLATFORMS[p_id], flag=p_flag)
+                else:
+                    print(f'The directory for {p_id} was invalid ({path})')
 
         # Raise a warning if no platforms were added (empty config file)
         if not self.platforms:

@@ -12,7 +12,7 @@ ROOT_FOLDER = os.path.dirname(sys.executable) \
     if getattr(sys, 'frozen', False) \
     else (Path(os.path.abspath(__file__)).parents[2])
 
-MEI_FOLDER = sys._MEIPASS if hasattr(sys, '_MEIPASS') else ROOT_FOLDER
+MEI_FOLDER = sys._MEIPASS if hasattr(sys, '_MEIPASS') else f'{ROOT_FOLDER}\\src'
 DATA_FOLDER = f'{MEI_FOLDER}\\data'
 CONF_FOLDER = f'{ROOT_FOLDER}\\config'
 LOGS_FOLDER = f'{ROOT_FOLDER}\\logs'
@@ -57,7 +57,7 @@ def initialize_folder(path: str = ROOT_FOLDER) -> bool:
 
     config_cfg = Path(f'{config_folder}\\config.cfg')
     config_cfg_content = (
-        "# Empty for now. To be implemented.\n"
+        "# Your config will go here.\n"
     )
 
     if not blacklist_cfg.exists():

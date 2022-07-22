@@ -214,7 +214,6 @@ class MainWindow(QMainWindow):
                                f'{len(self.rd.platforms)} platforms\n'
                                f'{len(blacklisted)} blacklisted\n')
             self.games_amount.setText(f'{len(normal)}/{len(self.rd.games)} Games total')
-
             self.rd.save_config()
 
     def list_all_blacklist(self):
@@ -370,6 +369,7 @@ class MainWindow(QMainWindow):
             return
         if self.confirm_prompt('Confirm removal', f'Remove {self.selected_path}?'):
             self.rd.remove_folder(self.selected_path)
+            # TODO BUG: Causes crash if last item gets removed
             self.selector_path.removeItem(self.selector_path.currentIndex())
             self.index_all()
 

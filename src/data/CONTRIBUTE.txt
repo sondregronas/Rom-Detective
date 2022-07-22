@@ -1,0 +1,7 @@
+Greetings stranger!
+
+Some of these database files are incomplete or may include errors
+If you happen to correct or add to any of them, please submit your
+changes in the form of a GitHub pull request :)
+
+https://github.com/sondregronas/rom-detective

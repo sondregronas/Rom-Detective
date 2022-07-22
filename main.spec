@@ -1,22 +1,14 @@
 # -*- mode: python ; coding: utf-8 -*-
 
-# Project folders
-# data/
-# src/
-# main.ico
-# main.spec
-# readme.txt
-
 block_cipher = None
-
 
 a = Analysis(
     ['src/main.py'],
     pathex=[],
     binaries=[],
-    datas=[('src/', '.'),
-           ('main.ico', '.'),
-           ('data/', 'data/'),],
+    datas=[('src/', '.'),],
+#           ('main.ico', '.'),
+#           ('data/', 'data/'),],
     hiddenimports=['os',
                    're',
                    'vdf',
@@ -24,8 +16,7 @@ a = Analysis(
                    'glob',
                    'pathlib.Path',
                    'xml.dom.minidom',
-                   'dataclasses.dataclass',
-                   'dataclasses.field',
+                   'dataclasses',
 	],
     hookspath=[],
     hooksconfig={},
@@ -61,5 +52,5 @@ exe = EXE(
     codesign_identity=None,
     entitlements_file=None,
     uac_admin=False,
-	icon='main.ico',
+	icon='src/main.ico',
 )

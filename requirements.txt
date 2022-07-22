@@ -1,9 +1,7 @@
-dataclasses==0.6
-pathlib==1.0.1
 vdf==3.4
 pyyaml==6.0
+PyQt6==6.3.1
+qt-material==2.12
 pytest==7.1.2
 pytest-cov==3.0.0
 pyinstaller==5.2
-PyQt6==6.3.1
-qt-material==2.12

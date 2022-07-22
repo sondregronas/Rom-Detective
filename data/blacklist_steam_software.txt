@@ -1,5 +1,0 @@
-# This list is INCOMPLETE
-228980=Steamworks Common Redistributables
-227260=DisplayFusion
-404790=Godot Engine
-431960=Wallpaper Engine
