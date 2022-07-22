@@ -11,7 +11,9 @@ ILLEGAL_CHARACTERS = ':®©™*"–/|<>?!'
 ROOT_FOLDER = os.path.dirname(sys.executable) \
     if getattr(sys, 'frozen', False) \
     else (Path(os.path.abspath(__file__)).parents[2])
-DATA_FOLDER = f'{ROOT_FOLDER}\\data'
+
+MEI_FOLDER = sys._MEIPASS if hasattr(sys, '_MEIPASS') else ROOT_FOLDER
+DATA_FOLDER = f'{MEI_FOLDER}\\data'
 CONF_FOLDER = f'{ROOT_FOLDER}\\config'
 LOGS_FOLDER = f'{ROOT_FOLDER}\\logs'
 

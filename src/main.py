@@ -5,7 +5,7 @@ from PyQt6.QtGui import *
 from PyQt6.QtCore import *
 from qt_material import apply_stylesheet
 
-from rom_detective import ROOT_FOLDER, initialize_folder, DEFAULT_TARGET_FOLDER
+from rom_detective import initialize_folder, DEFAULT_TARGET_FOLDER, ROOT_FOLDER, MEI_FOLDER
 from rom_detective.const import PLATFORMS
 from rom_detective.platforms import PlatformFlag
 from rom_detective.rom_detective import RomDetective
@@ -43,7 +43,7 @@ class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Rom Detective")
-        self.setWindowIcon(QIcon(f'{ROOT_FOLDER}\\main.ico'))
+        self.setWindowIcon(QIcon(f'{MEI_FOLDER}\\main.ico'))
         sys.stdout = EmittingStream(text=self.update_console)
         w, h = 900, 600
         self.resize(w, h)

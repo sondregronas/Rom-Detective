@@ -14,7 +14,9 @@ a = Analysis(
     ['src/main.py'],
     pathex=[],
     binaries=[],
-    datas=[('src/', '.')],
+    datas=[('src/', '.'),
+           ('main.ico', '.'),
+           ('data/', 'data/'),],
     hiddenimports=['os',
                    're',
                    'vdf',
@@ -35,6 +37,8 @@ a = Analysis(
     noarchive=False,
 )
 pyz = PYZ(a.pure, a.zipped_data, cipher=block_cipher)
+
+a.binaries -= TOC([('opengl32sw.dll', None, None)])
 
 exe = EXE(
     pyz,
@@ -59,8 +63,3 @@ exe = EXE(
     uac_admin=False,
 	icon='main.ico',
 )
-
-import shutil
-shutil.copyfile('main.ico', '{0}/main.ico'.format(DISTPATH))
-shutil.copyfile('readme.txt', '{0}/readme.txt'.format(DISTPATH))
-shutil.copytree('data', '{0}/data'.format(DISTPATH))
