@@ -62,7 +62,7 @@ class Item:
                                                   "r", encoding='utf8').read().split('\n')
         except FileNotFoundError as e:  # pragma: no cover
             print(f'Warning: {e}')
-            self.whitelisted = False
+            self._blacklist = False
 
     def whitelist(self, force: bool = True) -> None:
         """Override for <blacklisted> (Manually defined)"""
