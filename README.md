@@ -2,7 +2,7 @@
 <h1>🕵️ Rom Detective 🕹️</h1>
 <img src="media/graphic.png" width="50%">
 
-<a href="https://github.com/sondregronas/Rom-Detective/"><img src="https://img.shields.io/github/workflow/status/sondregronas/Rom-Detective/CI"></a>
+<a href="https://github.com/sondregronas/Rom-Detective/"><img src="https://img.shields.io/github/actions/workflow/status/sondregronas/Rom-Detective/CI.yml?branch=main"></a>
 <a href="https://github.com/sondregronas/Rom-Detective/commit/"><img src="https://img.shields.io/github/last-commit/sondregronas/Rom-Detective"></a>
 <img src="https://img.shields.io/github/license/sondregronas/Rom-Detective">
 <a href="https://codecov.io/gh/sondregronas/Rom-Detective"><img src="https://codecov.io/gh/sondregronas/Rom-Detective/branch/main/graph/badge.svg?token=HF8EDCQ4KZ"/></a>
