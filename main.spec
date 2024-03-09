@@ -38,7 +38,7 @@ exe = EXE(
     a.zipfiles,
     a.datas,
     [],
-    name='Rom Detective',
+    name='Rom_Detective',
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
