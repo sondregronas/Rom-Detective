@@ -13,12 +13,14 @@ Atari 7800:
 Atari Jaguar:
   aliases:
     - ajaguar
+    - jaguar
   extensions:
     - .j64
   id: atarijaguar
 Atari Lynx:
   aliases:
     - alynx
+    - lynx
   extensions:
     - .lnx
   id: atarilynx
@@ -67,6 +69,7 @@ Nintendo Game Boy Color:
 Nintendo GameCube:
   aliases:
     - nintendo gc
+    - ngc
   extensions:
     - .gcz
     - .ciso
@@ -111,6 +114,7 @@ Sega Genesis:
   aliases:
     - genesis
     - sega_genesis
+    - genesis-slash-megadrive
   extensions:
     - .bin
     - .7z
@@ -123,6 +127,7 @@ Sega Genesis:
 Sega Master System:
   aliases:
     - master system
+    - sms
   extensions:
     - .sms
   id: mastersystem
@@ -132,6 +137,7 @@ Sony Playstation:
     - sonyps1
     - ps1
     - sony ps1
+    - ps
   extensions:
     - .cue
   id: psx
