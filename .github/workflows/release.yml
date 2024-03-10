@@ -30,10 +30,10 @@ jobs:
           cp LICENSE app/
 
     - name: Build with PyInstaller
-      working-directory: ./app
       run: |
           .\venv\Scripts\activate
           pip install -r requirements.txt
+          cd app
           pyinstaller main.spec
 
     - name: Create Release
