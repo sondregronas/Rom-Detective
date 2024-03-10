@@ -37,7 +37,6 @@ jobs:
           pyinstaller main.spec
 
     - name: Create Release
-      working-directory: app
       uses: softprops/action-gh-release@v2
       with:
         tag_name: v${{ github.run_number }}
@@ -47,4 +46,4 @@ jobs:
           - Built with PyInstaller
         draft: false
         prerelease: false
-        files: ./dist/Rom_Detective.exe
+        files: ./app/dist/Rom_Detective.exe
