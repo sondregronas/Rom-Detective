@@ -43,9 +43,4 @@ jobs:
           - Built with PyInstaller
         draft: false
         prerelease: false
-
-    - name: Upload Release Asset
-      uses: softprops/action-gh-release@v2
-      with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          files: ./dist/Rom_Detective.exe
+        files: ./dist/Rom_Detective.exe
