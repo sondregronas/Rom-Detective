@@ -10,9 +10,6 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v3
 
-    - name: Install OpenGL Binaries
-      run: choco install opengl
-
     - name: Set up Python 3.9
       uses: actions/setup-python@v4
       with:
@@ -23,7 +20,6 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-    # Only include src, main.spec and the other necessary files to reduce the size of the release
     - name: Copy files
       run: |
           mkdir app
