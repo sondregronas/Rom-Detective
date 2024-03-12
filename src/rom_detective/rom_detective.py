@@ -217,7 +217,7 @@ class RomDetective:
         if not self.is_indexed:
             print('Cannot scan')
             return
-        [self.logger.add(create_shortcut(game, dry_run=dry_run)) for game in self.games]
+        [self.logger.add(create_shortcut(game, target_folder=self.target_folder, dry_run=dry_run)) for game in self.games]
 
         print(self.logger)
         if not dry_run:
