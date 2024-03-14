@@ -311,6 +311,7 @@ class MainWindow(QMainWindow):
             self.rd.target_folder = p
             self.target_folder.setText(self.rd.target_folder)
             print(f'Info: Set target folder to {self.rd.target_folder}')
+            self.rd.save_config()
 
     def reset_target_folder(self):
         if self.confirm_prompt(title='Confirm target folder', text=f'Reset target folder to\n'

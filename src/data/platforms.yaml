@@ -140,6 +140,7 @@ Sony Playstation:
     - ps
   extensions:
     - .cue
+    - .bin
   id: psx
 Sony Playstation 2:
   aliases:
