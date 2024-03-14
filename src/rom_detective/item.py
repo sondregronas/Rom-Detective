@@ -226,7 +226,7 @@ def index_ps3_folder(path: str, children: int = 2) -> list[PS3Item]:
 
     PS3 game ids are always 9ch in length
     """
-    return [PS3Item(f"{directory}\\{os.path.basename(directory)}")
+    return [PS3Item(f"{directory}")
             for directory in list_subfolders(path, children=children)
             if len(os.path.basename(directory)) == 9]
 
