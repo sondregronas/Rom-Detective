@@ -109,6 +109,7 @@ Nintendo Wii U:
   extensions:
     - .wux
     - .rpx
+    - .wua
   id: wiiu
 Sega Genesis:
   aliases:
