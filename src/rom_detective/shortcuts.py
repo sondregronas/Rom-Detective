@@ -7,6 +7,7 @@ from rom_detective import DEFAULT_TARGET_FOLDER
 from rom_detective.item import Item
 from rom_detective.platforms import Platform
 from rom_detective.logger import LoggerFlag
+from rom_detective import const
 
 
 def get_destination_folder(title: str, platform: Platform, target_folder: str = '',
@@ -80,6 +81,18 @@ def _create_symlink(target_file: str, destination_file: str) -> dict:
         raise RuntimeError(f'Missing Privileges to create symlinks, try running as admin. (Msg: {e})')
     return {LoggerFlag.SUCCESS: f'{destination_file}->{target_file}'}
 
+def _create_rpcs3_shortcut(target_file: str, destination_file: str) -> dict:
+    """
+    Takes a target_file path and a destination_file and creates a shortcut to launch rpcs3 with the game
+    as an argument (rpcs3.exe <target_file>)
+
+    Returns dict: 'success':f'{destination_file}->{target_file}'
+    """
+    with open(f'{destination_file}.bat', 'w+', encoding="utf-8") as shortcut:
+        shortcut.write(f'rpcs3.exe --no-gui "{target_file}"\nexit\n')
+
+    return {LoggerFlag.SUCCESS: f'{destination_file}->{target_file}'}
+
 
 def create_shortcut(item: Item, target_folder: str = '',
                     fullname: bool = True, dry_run: bool = False) -> dict:
@@ -110,5 +123,7 @@ def create_shortcut(item: Item, target_folder: str = '',
 
     if item.extension.lower() == '.url':
         return _create_shortcut(target_file=item.source, destination_file=destination)
+    elif item.platform == const.PLATFORMS['ps3']:
+        return _create_rpcs3_shortcut(target_file=item.source, destination_file=destination)
     else:
         return _create_symlink(target_file=item.source, destination_file=destination)

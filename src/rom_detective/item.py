@@ -134,7 +134,7 @@ class PS3Item(Item):
         self.g_id = self.source.split('\\')[-1]
         self.source += r'\PS3_GAME\USRDIR\EBOOT.BIN'
         try:
-            self.filename = f'{const.DATABASES.gameslist_ps3[self.g_id]}.BIN' if not self.filename else self.filename
+            self.filename = const.DATABASES.gameslist_ps3[self.g_id] if not self.filename else self.filename
         except KeyError:
             print(f'Warning (PS3): {self.g_id} is not a valid PS3 ID and will be blacklisted')
         self.clean_brackets = False

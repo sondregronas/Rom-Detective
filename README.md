@@ -25,6 +25,8 @@ Add your ROM folder (or individual folders) and hit "Create Shortcuts" - and you
 
 <img src="media/add_roms.gif">
 
+For RPCS3 & LaunchBox you need to remove the emulator from the ROMs, so it will launch the generated .bat file instead. (This is a limitation of RPCS3 only looking for game data where the symlink is, and not the actual EBOOT.BIN)
+
 ## Why?
 In order to more easily update the library inside an emulation launcher (such as LaunchBox),
 proper naming schemes & file structure is key for good results, but not always permitted depending on the ROM type.
