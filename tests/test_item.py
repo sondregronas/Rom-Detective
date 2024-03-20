@@ -10,7 +10,7 @@ def test_ps3():
     rd.index_all()
 
     assert rd.games
-    assert 'Test ROM.BIN' in [game.filename for game in rd.games]
+    assert 'Test ROM' in [game.filename for game in rd.games]
     assert rd.games[0].source.endswith('PS3_GAME\\USRDIR\\EBOOT.BIN')
     assert len(rd.games) == 3
     assert len(rd.stats[RDFlag.INDEXED]) == 2
