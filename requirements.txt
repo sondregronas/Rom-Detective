@@ -2,6 +2,6 @@ vdf==3.4
 pyyaml==6.0.1
 PyQt6==6.6.1
 qt-material==2.14
-pytest==8.0.2
+pytest==8.1.1
 pytest-cov==4.1.0
 pyinstaller==6.4.0
