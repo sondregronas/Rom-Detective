@@ -4,4 +4,4 @@ PyQt6==6.6.1
 qt-material==2.14
 pytest==8.0.2
 pytest-cov==4.1.0
-pyinstaller==6.4.0
+pyinstaller==6.5.0
